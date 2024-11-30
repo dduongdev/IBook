@@ -12,21 +12,16 @@ namespace Entities
     {
         public int Id { get; set; }
 
-        [Display(Name = "Tên sách")]
         [Required(ErrorMessage = "Trường này là bắt buộc.")]
         public required string Title { get; set; }
 
-        [Display(Name = "Tác giả")]
         public string? Author { get; set; }
 
-        [Display(Name = "Mô tả")]
         public string? Description { get; set; }
 
-        [Display(Name = "Giá")]
         [Required(ErrorMessage = "Trường này là bắt buộc.")]
         public required decimal Price { get; set; }
 
-        [Display(Name = "Số lượng")]
         [Required(ErrorMessage = "Trường này là bắt buộc.")]
         public required int Stock {  get; set; }
         public string? ImagesDirectory { get; set; }
