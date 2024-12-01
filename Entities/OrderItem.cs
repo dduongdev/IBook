@@ -14,6 +14,9 @@ namespace Entities
 
         [Required(ErrorMessage = "Trường này là bắt buộc.")]
         public required int Quantity { get; set; }
+
+        [Required(ErrorMessage = "Trường này là bắt buộc.")]
+        public required decimal PriceAtPurchase { get; set; }
         public int OrderId { get; set; }
     }
 }
