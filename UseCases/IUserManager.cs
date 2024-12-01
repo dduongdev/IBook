@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,10 @@ namespace UseCases
 {
     public interface IUserManager
     {
+        Task<IEnumerable<User>> GetAllAsync();
+        Task<User?> GetByIdAsync(int id);
+        Task AddAsync(User user);
+        Task UpdateAsync(User user);
+        Task SuspendAsync(int id);
     }
 }
