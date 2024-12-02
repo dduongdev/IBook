@@ -7,13 +7,8 @@ using System.Threading.Tasks;
 
 namespace UseCases.Repositories
 {
-    public interface ICartItemRepository
+    public interface ICartItemRepository : IRepository<CartItem>
     {
-        Task<IEnumerable<CartItem>> GetAllAsync();
-        Task<CartItem?> GetByIdAsync(int id);
         Task<IEnumerable<CartItem>> GetByCartIdAsync(int cartId);
-        Task AddAsync(CartItem cartItem);
-        Task UpdateAsync(CartItem cartItem);
-        Task DeleteAsync(int id);
     }
 }

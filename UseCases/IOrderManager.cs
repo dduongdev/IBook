@@ -9,11 +9,5 @@ namespace UseCases
 {
     public interface IOrderManager
     {
-        Task<IEnumerable<Order>> GetAllAsync();
-        Task<IEnumerable<Order>> GetByUserIdAsync(int userId);
-        Task<Order?> GetByIdAsync(int id);
-        Task CreateAsync(Order order);
-        Task UpdateAsync(Order order);
-        Task CancelAsync(int id);
     }
 }

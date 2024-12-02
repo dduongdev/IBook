@@ -7,12 +7,7 @@ using System.Threading.Tasks;
 
 namespace UseCases.Repositories
 {
-    public interface IPublisherRepository
+    public interface IPublisherRepository : IRepository<Publisher>
     {
-        Task<IEnumerable<Publisher>> GetAllAsync();
-        Task<Publisher?> GetByIdAsync(int id);
-        Task AddAsync(Publisher publisher);
-        Task UpdateAsync(Publisher publisher);
-        Task DeleteAsync(int id);
     }
 }

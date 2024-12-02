@@ -7,7 +7,7 @@ using UseCases.Repositories;
 
 namespace UseCases.UnitOfWork
 {
-    public interface IOrderUnitOfWork : IUnitOfWork
+    public interface IOrderItemUnitOfWork : IUnitOfWork
     {
         IBookRepository BookRepository { get; }
         IOrderRepository OrderRepository { get; }

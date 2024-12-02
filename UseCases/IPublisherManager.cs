@@ -9,10 +9,5 @@ namespace UseCases
 {
     public interface IPublisherManager
     {
-        Task<IEnumerable<Publisher>> GetAllAsync();
-        Task<Publisher?> GetByIdAsync(int id);
-        Task AddAsync(Publisher publisher);
-        Task UpdateAsync(Publisher publisher);
-        Task SuspendAsync(int id);
     }
 }

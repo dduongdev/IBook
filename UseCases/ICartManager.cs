@@ -9,11 +9,5 @@ namespace UseCases
 {
     public interface ICartManager
     {
-        Task<IEnumerable<Cart>> GetAllAsync();
-        Task<Cart?> GetByIdAsync(int id);
-        Task<Cart?> GetByUserIdAsync(int userId);
-        Task AddAsync(Cart cart);
-        Task UpdateAsync(Cart cart);
-        Task SuspendAsync(int id);
     }
 }

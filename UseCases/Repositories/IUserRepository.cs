@@ -7,12 +7,7 @@ using System.Threading.Tasks;
 
 namespace UseCases.Repositories
 {
-    public interface IUserRepository
+    public interface IUserRepository : IRepository<User>
     {
-        Task<IEnumerable<User>> GetAllAsync();
-        Task<User?> GetByIdAsync(int id);
-        Task AddAsync(User user);
-        Task UpdateAsync(User user);
-        Task DeleteAsync(int id);
     }
 }

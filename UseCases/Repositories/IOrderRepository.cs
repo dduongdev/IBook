@@ -7,12 +7,7 @@ using System.Threading.Tasks;
 
 namespace UseCases.Repositories
 {
-    public interface IOrderRepository
+    public interface IOrderRepository : IRepository<Order>
     {
-        Task<IEnumerable<Order>> GetAllAsync();
-        Task<Order?> GetByIdAsync(int id);
-        Task AddAsync(Order order);
-        Task UpdateAsync(Order order);
-        Task DeleteAsync(int id);
     }
 }

@@ -7,12 +7,7 @@ using System.Threading.Tasks;
 
 namespace UseCases.Repositories
 {
-    public interface IFeedbackRepository
+    public interface IFeedbackRepository : IRepository<Feedback>
     {
-        Task<IEnumerable<Feedback>> GetAllAsync();
-        Task<Feedback?> GetByIdAsync(int id);
-        Task AddAsync(Feedback feedback);
-        Task UpdateAsync(Feedback feedback);
-        Task DeleteAsync(int id);
     }
 }
