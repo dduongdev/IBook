@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UseCases
 {
-    public interface AuthManager
+    public interface IAuthManager
     {
     }
 }
