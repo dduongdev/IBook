@@ -10,7 +10,6 @@ namespace Entities
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public ICollection<CartItem>? CartItems { get; set; }
         public EntityStatus Status { get; set; }
     }
 }
