@@ -10,6 +10,5 @@ namespace Entities
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public EntityStatus Status { get; set; }
     }
 }
