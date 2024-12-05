@@ -1,14 +1,13 @@
-﻿using Entities;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UseCases;
 using UseCases.Repositories;
-using Xunit;
+using UseCases;
+using Entities;
 
 namespace Test
 {
@@ -63,7 +62,7 @@ namespace Test
             var result = await authenticationManager.LoginAsync("testuser", "correctpassword");
 
             Assert.Equal(LoginResultCodes.Success, result.ResultCode);
-            Assert.Equal("Success!", result.Message);
+            Assert.Equal("Success", result.Message);
         }
     }
 }

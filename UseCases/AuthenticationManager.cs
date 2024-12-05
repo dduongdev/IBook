@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using UseCases.Repositories;
 
 namespace UseCases
 {
-    public class AuthenticationManager
+    public class AuthenticationManager : IAuthenticationManager
     {
         private readonly IUserRepository _userRepository;
 
@@ -21,26 +22,50 @@ namespace UseCases
         {
             try
             {
-                var storedUsers = await _userRepository.GetAllAsync();
-                var targetUser = storedUsers.FirstOrDefault(_ => _.Username == username);
+                var users = await _userRepository.GetAllAsync();
+                var foundUser = users.FirstOrDefault(_ => _.Username == username);
 
-                if (targetUser == null)
+                if (foundUser == null)
                 {
                     return new LoginResult(LoginResultCodes.UserNotFound, null, "User is not found!");
                 }
 
                 var passwordHasher = new PasswordHasher<string>();
-                var verifyPasswordResult = passwordHasher.VerifyHashedPassword(username, targetUser.Password, password);
-                if (verifyPasswordResult == PasswordVerificationResult.Failed)
+                var passwordVerificationResult = passwordHasher.VerifyHashedPassword(username, foundUser.Password, password);
+                if (passwordVerificationResult == PasswordVerificationResult.Failed)
                 {
                     return new LoginResult(LoginResultCodes.WrongPassword, null, "Wrong password!");
                 }
 
-                return new LoginResult(LoginResultCodes.Success, targetUser, "Success!");
+                return new LoginResult(LoginResultCodes.Success, foundUser, "Success!");
             }
             catch (Exception ex) 
             {
                 return new LoginResult(LoginResultCodes.Error, null, ex.Message);
+            }
+        }
+
+        public async Task<SignupResult> SignupAsync(User user)
+        {
+            try
+            {
+                var users = await _userRepository.GetAllAsync();
+                var existingUser = users.FirstOrDefault(_ => _.Username == user.Username);
+
+                if (existingUser != null)
+                {
+                    return SignupResult.UserExisted;
+                }
+
+                var passwordHasher = new PasswordHasher<string>();
+                user.Password = passwordHasher.HashPassword(user.Username, user.Password);
+
+                await _userRepository.AddAsync(user);
+                return SignupResult.Success;
+            }
+            catch (Exception ex)
+            {
+                return new SignupResult(SignupResultCodes.Error, ex.Message);
             }
         }
     }
