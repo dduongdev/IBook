@@ -53,7 +53,7 @@ namespace Infrastructure.SqlServer.Repositories
 
         public async Task UpdateAsync(Entities.Cart cart)
         {
-            var storedCart = await _context.Carts.FirstOrDefaultAsync(c => c.Id == id);
+            var storedCart = await _context.Carts.FirstOrDefaultAsync(c => c.Id == cart.Id);
             if (storedCart != null)
             {
                 _mapper.Map(cart, storedCart);
