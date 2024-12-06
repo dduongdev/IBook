@@ -51,6 +51,12 @@ namespace Infrastructure.SqlServer.Repositories
             return _mapper.Map<Entities.User?>(storedUser);
         }
 
+        public async Task<Entities.User?> GetByUsernameAsync(string username)
+        {
+            var foundUser = await _context.Users.FirstOrDefaultAsync(_ => _.Username == username);
+            return _mapper.Map<Entities.User?>(foundUser);
+        }
+
         public async Task UpdateAsync(Entities.User user)
         {
             var storedUser = await _context.Users.FirstOrDefaultAsync(_ => _.Id == user.Id);
