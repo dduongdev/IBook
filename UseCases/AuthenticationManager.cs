@@ -22,8 +22,7 @@ namespace UseCases
         {
             try
             {
-                var users = await _userRepository.GetAllAsync();
-                var foundUser = users.FirstOrDefault(_ => _.Username == username);
+                var foundUser = await _userRepository.GetByUsernameAsync(username);
 
                 if (foundUser == null)
                 {
@@ -49,8 +48,7 @@ namespace UseCases
         {
             try
             {
-                var users = await _userRepository.GetAllAsync();
-                var existingUser = users.FirstOrDefault(_ => _.Username == user.Username);
+                var existingUser = await _userRepository.GetByUsernameAsync(user.Username);
 
                 if (existingUser != null)
                 {
