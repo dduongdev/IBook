@@ -10,7 +10,6 @@ namespace UseCases.UnitOfWork
     public interface IOrderUnitOfWork : IUnitOfWork
     {
         IBookRepository BookRepository { get; }
-        IOrderRepository OrderRepository { get; }
         IOrderItemRepository OrderItemRepository { get; }
     }
 }
