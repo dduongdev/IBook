@@ -5,7 +5,6 @@ using Infrastructure.SqlServer.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using UseCases;
-using UseCases.DTO;
 
 namespace Test
 {
@@ -19,10 +18,10 @@ namespace Test
             var serviceProvider = service.BuildServiceProvider();
             var orderManager = new OrderManager(new SqlServerOrderUnitOfWork(serviceProvider.GetRequiredService<BookDbContext>(), serviceProvider.GetRequiredService<IMapper>()));
 
-            IEnumerable<OrderDTO> orderDTOs = await orderManager.GetAllAsync();
+            IEnumerable<Entities.Order> orderDTOs = await orderManager.GetAllAsync();
             foreach (var orderDTO in orderDTOs)
             {
-                Console.WriteLine(orderDTO.Order.DeliveryPhone);
+                Console.WriteLine(orderDTO.DeliveryPhone);
                 foreach (var orderItem in orderDTO.OrderItems)
                 {
                     Console.WriteLine(orderItem.Quantity);

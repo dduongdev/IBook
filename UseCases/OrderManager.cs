@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UseCases.DTO;
 using UseCases.UnitOfWork;
 
 namespace UseCases
@@ -18,33 +17,22 @@ namespace UseCases
             _orderUnitOfWork = orderUnitOfWork;
         }
 
-        public async Task<IEnumerable<OrderDTO>> GetAllAsync()
+        public Task<IEnumerable<Order>> GetAllAsync()
         {
-            IEnumerable<OrderDTO> orderDTOs = new List<OrderDTO>();
-            var orders = await _orderUnitOfWork.OrderRepository.GetAllAsync();
-            foreach (var order in orders)
-            {
-                var orderItems = await _orderUnitOfWork.OrderItemRepository.GetByOrderIdAsync(order.Id);
-                ((List<OrderDTO>)orderDTOs).Add(new OrderDTO
-                {
-                    Order = order,
-                    OrderItems = orderItems
-                });
-            }
-            return orderDTOs;
+            return _orderUnitOfWork.OrderRepository.GetAllAsync();
         }
 
-        public async Task<CreateOrderResult> AddAsync(OrderDTO orderDTO)
+        public async Task<CreateOrderResult> AddAsync(Order order)
         {
             try
             {
                 await _orderUnitOfWork.BeginTransactionAsync();
 
-                await _orderUnitOfWork.OrderRepository.AddAsync(orderDTO.Order);
+                await _orderUnitOfWork.OrderRepository.AddAsync(order);
 
-                foreach (var item in orderDTO.OrderItems)
+                foreach (var item in order.OrderItems)
                 {
-                    item.OrderId = orderDTO.Order.Id;
+                    item.OrderId = order.Id;
 
                     var book = await _orderUnitOfWork.BookRepository.GetByIdAsync(item.BookId);
 
@@ -123,17 +111,9 @@ namespace UseCases
             }
         }
 
-        public async Task<OrderDTO?> GetByIdAsync(int id)
+        public Task<Order?> GetByIdAsync(int id)
         {
-            OrderDTO? orderDTO = null;
-            var foundOrder = await _orderUnitOfWork.OrderRepository.GetByIdAsync(id);
-            if (foundOrder != null)
-            {
-                orderDTO = new OrderDTO();
-                orderDTO.Order = foundOrder;
-                ((List<OrderItem>)orderDTO.OrderItems).AddRange(await _orderUnitOfWork.OrderItemRepository.GetByOrderIdAsync(foundOrder.Id));
-            }
-            return orderDTO;
+            return _orderUnitOfWork.OrderRepository.GetByIdAsync(id);
         }
 
         public async Task ChangeOrderStatus(int id, OrderStatus status)
