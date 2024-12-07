@@ -17,7 +17,7 @@ namespace Infrastructure.SqlServer.Repositories.SqlServer.DataContext
         public int? AncestorFeedbackId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public Book Book { get; set; } = default!;
-        public User User { get; set; } = default!;
+        public virtual Book Book { get; set; } = default!;
+        public virtual User User { get; set; } = default!;
     }
 }

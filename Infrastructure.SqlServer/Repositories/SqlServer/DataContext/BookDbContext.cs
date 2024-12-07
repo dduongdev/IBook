@@ -27,7 +27,7 @@ namespace Infrastructure.SqlServer.Repositories.SqlServer.DataContext
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=IBookDb;Integrated Security=True;");
+            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=IBookDb;Integrated Security=True;").UseLazyLoadingProxies();
         }
     }
 }

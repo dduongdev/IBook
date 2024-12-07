@@ -14,7 +14,7 @@ namespace Infrastructure.SqlServer.Repositories.SqlServer.DataContext
         public required int Quantity { get; set; }
         public int CartId { get; set; }
 
-        public Cart Cart { get; set; } = default!;
-        public Book Book { get; set; } = default!;
+        public virtual Cart Cart { get; set; } = default!;
+        public virtual Book Book { get; set; } = default!;
     }
 }
