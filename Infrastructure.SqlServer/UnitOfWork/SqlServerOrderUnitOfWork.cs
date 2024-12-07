@@ -11,21 +11,23 @@ using UseCases.UnitOfWork;
 
 namespace Infrastructure.SqlServer.UnitOfWork
 {
-    public class SqlServerOrderItemUnitOfWork : IOrderItemUnitOfWork
+    public class SqlServerOrderUnitOfWork : IOrderUnitOfWork
     {
         private readonly BookDbContext _context;
         private readonly IMapper _mapper;
 
         public IBookRepository BookRepository { get; }
+        public IOrderRepository OrderRepository { get; }
 
         public IOrderItemRepository OrderItemRepository { get; }
 
-        public SqlServerOrderItemUnitOfWork(BookDbContext context, IMapper mapper)
+        public SqlServerOrderUnitOfWork(BookDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
 
             BookRepository = new SqlServerBookRepository(context, mapper);
+            OrderRepository = new SqlServerOrderRepository(context, mapper);
             OrderItemRepository = new SqlServerOrderItemRepository(context, mapper);
         }
 
