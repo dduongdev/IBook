@@ -15,7 +15,7 @@ namespace Infrastructure.SqlServer.Repositories.SqlServer.DataContext
         public required decimal PriceAtPurchase { get; set; }
         public int OrderId { get; set; }
 
-        public Order Order { get; set; } = default!;
-        public Book Book { get; set; } = default!;
+        public virtual Order Order { get; set; } = default!;
+        public virtual Book Book { get; set; } = default!;
     }
 }

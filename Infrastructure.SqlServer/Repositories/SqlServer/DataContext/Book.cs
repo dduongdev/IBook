@@ -21,10 +21,10 @@ namespace Infrastructure.SqlServer.Repositories.SqlServer.DataContext
         public Entities.EntityStatus Status { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public Category Category { get; set; } = default!;
-        public ICollection<Feedback> Feedbacks { get; set; } = default!;
-        public Publisher Publisher { get; set; } = default!;
-        public ICollection<OrderItem> OrderItems { get; set; } = default!;
-        public ICollection<CartItem> CartItems { get; set;} = default!;
+        public virtual Category Category { get; set; } = default!;
+        public virtual ICollection<Feedback> Feedbacks { get; set; } = default!;
+        public virtual Publisher Publisher { get; set; } = default!;
+        public virtual ICollection<OrderItem> OrderItems { get; set; } = default!;
+        public virtual ICollection<CartItem> CartItems { get; set;} = default!;
     }
 }

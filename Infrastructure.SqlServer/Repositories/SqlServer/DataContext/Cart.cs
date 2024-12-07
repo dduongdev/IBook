@@ -12,7 +12,7 @@ namespace Infrastructure.SqlServer.Repositories.SqlServer.DataContext
         public int UserId { get; set; }
         public Entities.EntityStatus Status { get; set; }
 
-        public ICollection<CartItem> CartItems { get; set; } = default!;
-        public User User { get; set; } = default!;
+        public virtual ICollection<CartItem> CartItems { get; set; } = default!;
+        public virtual User User { get; set; } = default!;
     }
 }
