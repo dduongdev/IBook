@@ -8,7 +8,7 @@ using UseCases.UnitOfWork;
 
 namespace UseCases
 {
-    public class PublisherManager
+    public class PublisherManager : IPublisherManager
     {
         private readonly IPublisherUnitOfWork _publisherUnitOfWork;
 

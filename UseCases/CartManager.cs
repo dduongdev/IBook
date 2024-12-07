@@ -8,7 +8,7 @@ using UseCases.Repositories;
 
 namespace UseCases
 {
-    public class CartManager
+    public class CartManager : ICartManager
     {
         private readonly ICartRepository _cartRepository;
 
@@ -22,19 +22,15 @@ namespace UseCases
             return _cartRepository.GetAllAsync();
         }
 
-        public Task AddAsync(Cart cart)
-        {
-            return _cartRepository.AddAsync(cart);
-        }
-
-        public Task UpdateAsync(Cart cart)
-        {
-            return _cartRepository.UpdateAsync(cart);
-        }
-
         public Task<Cart?> GetByIdAsync(int id)
         {
             return _cartRepository.GetByIdAsync(id);
+        }
+
+        public async Task<Cart?> GetByUserIdAsync(int userId)
+        {
+            var carts = await _cartRepository.GetAllAsync();
+            return carts.FirstOrDefault(_ => _.UserId == userId);
         }
     }
 }

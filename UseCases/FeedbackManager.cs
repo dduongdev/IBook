@@ -8,7 +8,7 @@ using UseCases.Repositories;
 
 namespace UseCases
 {
-    public class FeedbackManager
+    public class FeedbackManager : IFeedbackManager
     {
         private readonly IFeedbackRepository _feedbackRepository;
 

@@ -8,7 +8,7 @@ using UseCases.Repositories;
 
 namespace UseCases
 {
-    public class BookManager
+    public class BookManager : IBookManager
     {
         private readonly IBookRepository _bookRepository;
 

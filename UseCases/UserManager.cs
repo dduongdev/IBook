@@ -8,7 +8,7 @@ using UseCases.Repositories;
 
 namespace UseCases
 {
-    public class UserManager
+    public class UserManager : IUserManager
     {
         private readonly IUserRepository _userRepository;
 
