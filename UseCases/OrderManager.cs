@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UseCases.DTO;
 using UseCases.UnitOfWork;
 
 namespace UseCases
 {
-    public class OrderManager : IOrderManager, IOrderItemManager
+    public class OrderManager : IOrderManager
     {
         private readonly IOrderUnitOfWork _orderUnitOfWork;
 
@@ -17,27 +18,33 @@ namespace UseCases
             _orderUnitOfWork = orderUnitOfWork;
         }
 
-        public Task<IEnumerable<Order>> GetAllAsync()
+        public async Task<IEnumerable<OrderDTO>> GetAllAsync()
         {
-            return _orderUnitOfWork.OrderRepository.GetAllAsync();
+            IEnumerable<OrderDTO> orderDTOs = new List<OrderDTO>();
+            var orders = await _orderUnitOfWork.OrderRepository.GetAllAsync();
+            foreach (var order in orders)
+            {
+                var orderItems = await _orderUnitOfWork.OrderItemRepository.GetByOrderIdAsync(order.Id);
+                ((List<OrderDTO>)orderDTOs).Add(new OrderDTO
+                {
+                    Order = order,
+                    OrderItems = orderItems
+                });
+            }
+            return orderDTOs;
         }
 
-        public Task<Order?> GetByIdAsync(int id)
-        {
-            return _orderUnitOfWork.OrderRepository.GetByIdAsync(id);
-        }
-
-        public async Task<CreateOrderResult> AddAsync(Order order, IEnumerable<OrderItem> orderItems)
+        public async Task<CreateOrderResult> AddAsync(OrderDTO orderDTO)
         {
             try
             {
                 await _orderUnitOfWork.BeginTransactionAsync();
 
-                await _orderUnitOfWork.OrderRepository.AddAsync(order);
+                await _orderUnitOfWork.OrderRepository.AddAsync(orderDTO.Order);
 
-                foreach (var item in orderItems)
+                foreach (var item in orderDTO.OrderItems)
                 {
-                    item.OrderId = order.Id;
+                    item.OrderId = orderDTO.Order.Id;
 
                     var book = await _orderUnitOfWork.BookRepository.GetByIdAsync(item.BookId);
 
@@ -116,14 +123,17 @@ namespace UseCases
             }
         }
 
-        public Task<IEnumerable<OrderItem>> GetOrderItemsForOrderAsync(int orderId)
+        public async Task<OrderDTO?> GetByIdAsync(int id)
         {
-            return _orderUnitOfWork.OrderItemRepository.GetByOrderIdAsync(orderId);
-        }
-
-        public Task UpdateAsync(Order order)
-        {
-            return _orderUnitOfWork.OrderRepository.UpdateAsync(order);
+            OrderDTO? orderDTO = null;
+            var foundOrder = await _orderUnitOfWork.OrderRepository.GetByIdAsync(id);
+            if (foundOrder != null)
+            {
+                orderDTO = new OrderDTO();
+                orderDTO.Order = foundOrder;
+                ((List<OrderItem>)orderDTO.OrderItems).AddRange(await _orderUnitOfWork.OrderItemRepository.GetByOrderIdAsync(foundOrder.Id));
+            }
+            return orderDTO;
         }
 
         public async Task ChangeOrderStatus(int id, OrderStatus status)
