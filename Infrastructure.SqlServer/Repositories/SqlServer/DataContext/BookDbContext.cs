@@ -9,15 +9,20 @@ namespace Infrastructure.SqlServer.Repositories.SqlServer.DataContext
 {
     public class BookDbContext : DbContext
     {
-        public DbSet<Book> Books { get; set; }
-        public DbSet<Cart> Carts { get; set; }
-        public DbSet<CartItem> CartItems { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Feedback> Feedbacks { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<Publisher> Publishers { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Book> Books { get; set; } = default!;
+        public DbSet<Cart> Carts { get; set; } = default!;
+        public DbSet<CartItem> CartItems { get; set; } = default!;
+        public DbSet<Category> Categories { get; set; } = default!;
+        public DbSet<Feedback> Feedbacks { get; set; } = default!;
+        public DbSet<Order> Orders { get; set; } = default!;
+        public DbSet<OrderItem> OrderItems { get; set; } = default!;
+        public DbSet<Publisher> Publishers { get; set; } = default!;
+        public DbSet<User> Users { get; set; } = default!;
+
+        public BookDbContext(DbContextOptions<BookDbContext> options) : base(options)
+        {
+
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
