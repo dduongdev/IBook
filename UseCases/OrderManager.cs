@@ -8,7 +8,7 @@ using UseCases.UnitOfWork;
 
 namespace UseCases
 {
-    public class OrderManager : IOrderManager
+    public class OrderManager : IOrderManager, IOrderItemManager
     {
         private readonly IOrderUnitOfWork _orderUnitOfWork;
 
