@@ -11,7 +11,7 @@ using UseCases.UnitOfWork;
 
 namespace Infrastructure.SqlServer.UnitOfWork
 {
-    public class SqlServerOrderUnitOfWork : IOrderItemUnitOfWork
+    public class SqlServerOrderUnitOfWork : IOrderUnitOfWork
     {
         private readonly BookDbContext _context;
         private readonly IMapper _mapper;
