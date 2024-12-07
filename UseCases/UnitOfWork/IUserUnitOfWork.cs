@@ -7,9 +7,9 @@ using UseCases.Repositories;
 
 namespace UseCases.UnitOfWork
 {
-    public interface IOrderItemUnitOfWork : IUnitOfWork
+    public interface IUserUnitOfWork : IUnitOfWork
     {
-        IBookRepository BookRepository { get; }
-        IOrderItemRepository OrderItemRepository { get; }
+        IUserRepository UserRepository { get; }
+        ICartRepository CartRepository { get; }
     }
 }

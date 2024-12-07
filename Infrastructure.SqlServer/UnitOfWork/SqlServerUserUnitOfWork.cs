@@ -11,22 +11,22 @@ using UseCases.UnitOfWork;
 
 namespace Infrastructure.SqlServer.UnitOfWork
 {
-    public class SqlServerOrderItemUnitOfWork : IOrderItemUnitOfWork
+    public class SqlServerUserUnitOfWork : IUserUnitOfWork
     {
         private readonly BookDbContext _context;
         private readonly IMapper _mapper;
 
-        public IBookRepository BookRepository { get; }
+        public IUserRepository UserRepository { get; }
 
-        public IOrderItemRepository OrderItemRepository { get; }
+        public ICartRepository CartRepository { get; }
 
-        public SqlServerOrderItemUnitOfWork(BookDbContext context, IMapper mapper)
+        public SqlServerUserUnitOfWork(BookDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
 
-            BookRepository = new SqlServerBookRepository(context, mapper);
-            OrderItemRepository = new SqlServerOrderItemRepository(context, mapper);
+            UserRepository = new SqlServerUserRepository(context, mapper);
+            CartRepository = new SqlServerCartRepository(context, mapper);
         }
 
         public Task BeginTransactionAsync()
