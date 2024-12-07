@@ -8,7 +8,7 @@ using Infrastructure.SqlServer.Repositories.SqlServer.DataContext;
 
 namespace Infrastructure.SqlServer.Repositories.SqlServer.MapperProfile
 {
-    internal class SqlServer2EntityProfile : Profile
+    public class SqlServer2EntityProfile : Profile
     {
         public SqlServer2EntityProfile()
         {
