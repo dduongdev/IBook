@@ -18,7 +18,7 @@ namespace Infrastructure.SqlServer.Repositories.SqlServer.DataContext
         public required string DeliveryPhone { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public ICollection<OrderItem> OrderItems { get; set; } = default!;
-        public User User { get; set; } = default!;
+        public virtual ICollection<OrderItem> OrderItems { get; set; } = default!;
+        public virtual User User { get; set; } = default!;
     }
 }
