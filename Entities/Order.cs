@@ -21,5 +21,7 @@ namespace Entities
         [Required(ErrorMessage = "Trường này là bắt buộc.")]
         public required string DeliveryPhone { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public IEnumerable<OrderItem>? OrderItems { get; set; }
     }
 }
