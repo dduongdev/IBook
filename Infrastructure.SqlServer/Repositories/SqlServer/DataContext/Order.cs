@@ -19,6 +19,6 @@ namespace Infrastructure.SqlServer.Repositories.SqlServer.DataContext
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public ICollection<OrderItem> OrderItems { get; set; } = default!;
-        public User User { get; set; } =default!;
+        public User User { get; set; } = default!;
     }
 }

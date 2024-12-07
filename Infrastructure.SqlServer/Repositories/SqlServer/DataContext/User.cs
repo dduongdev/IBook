@@ -20,8 +20,8 @@ namespace Infrastructure.SqlServer.Repositories.SqlServer.DataContext
         public EntityStatus Status { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public Cart Cart { get; set; } = default!;
-        public ICollection<Order> Orders { get; set; } = default!;
-        public ICollection<Feedback> Feedbacks { get; set; } = default!;
+        public virtual Cart Cart { get; set; } = default!;
+        public virtual ICollection<Order> Orders { get; set; } = default!;
+        public virtual ICollection<Feedback> Feedbacks { get; set; } = default!;
     }
 }

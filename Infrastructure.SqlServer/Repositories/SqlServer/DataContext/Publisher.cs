@@ -14,6 +14,6 @@ namespace Infrastructure.SqlServer.Repositories.SqlServer.DataContext
         public Entities.EntityStatus Status { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public ICollection<Book> Books { get; set; } = default!;
+        public virtual ICollection<Book> Books { get; set; } = default!;
     }
 }
