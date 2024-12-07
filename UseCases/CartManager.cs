@@ -17,11 +17,6 @@ namespace UseCases
             _cartRepository = cartRepository;
         }
 
-        public Task<IEnumerable<Cart>> GetAllAsync()
-        {
-            return _cartRepository.GetAllAsync();
-        }
-
         public Task<Cart?> GetByIdAsync(int id)
         {
             return _cartRepository.GetByIdAsync(id);

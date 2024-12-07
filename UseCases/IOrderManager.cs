@@ -13,5 +13,6 @@ namespace UseCases
         Task<Order?> GetByIdAsync(int id);
         Task<CreateOrderResult> AddAsync(Order order, IEnumerable<OrderItem> orderItems);
         Task<AtomicTaskResult> DeleteAsync(int id);
+        Task<IEnumerable<OrderItem>> GetOrderItemsForOrderAsync(int orderId);
     }
 }

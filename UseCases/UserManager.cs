@@ -5,43 +5,70 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UseCases.Repositories;
+using UseCases.UnitOfWork;
 
 namespace UseCases
 {
     public class UserManager : IUserManager
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserUnitOfWork _userUnitOfWork;
 
-        public UserManager(IUserRepository userRepository)
+        public UserManager(IUserUnitOfWork userUnitOfWork)
         {
-            _userRepository = userRepository;
+            _userUnitOfWork = userUnitOfWork;
         }
 
         public Task<IEnumerable<User>> GetAllAsync()
         {
-            return _userRepository.GetAllAsync();
+            return _userUnitOfWork.UserRepository.GetAllAsync();
         }
 
         public Task<User?> GetByIdAsync(int id)
         {
-            return _userRepository.GetByIdAsync(id);
+            return _userUnitOfWork.UserRepository.GetByIdAsync(id);
         }
 
-        public Task AddAsync(User user)
+        public Task<User?> GetByUsernameAsync(string username)
         {
-            return _userRepository.AddAsync(user);
+            return _userUnitOfWork.UserRepository.GetByUsernameAsync(username);
+        }
+
+        public async Task<AtomicTaskResult> AddAsync(User user)
+        {
+            try
+            {
+                await _userUnitOfWork.BeginTransactionAsync();
+
+                await _userUnitOfWork.UserRepository.AddAsync(user);
+
+                var staredCart = new Cart
+                {
+                    UserId = user.Id
+                };
+
+                await _userUnitOfWork.CartRepository.AddAsync(staredCart);
+
+                await _userUnitOfWork.SaveChangesAsync();
+
+                return AtomicTaskResult.Success;
+            }
+            catch (Exception ex)
+            {
+                await _userUnitOfWork.CancelTransactionAsync();
+                return new AtomicTaskResult(AtomicTaskResultCodes.Error, ex.Message);
+            }
         }
 
         public Task UpdateAsync(User user)
         {
-            return _userRepository.UpdateAsync(user);
+            return _userUnitOfWork.UserRepository.UpdateAsync(user);
         }
 
         public async Task<AtomicTaskResult> SuspendAsync(int id)
         {
             try
             {
-                var foundUser = await _userRepository.GetByIdAsync(id);
+                var foundUser = await _userUnitOfWork.UserRepository.GetByIdAsync(id);
                 if (foundUser == null)
                 {
                     return AtomicTaskResult.NotFound;
@@ -49,7 +76,7 @@ namespace UseCases
 
                 foundUser.Status = EntityStatus.Suspended;
 
-                await _userRepository.UpdateAsync(foundUser);
+                await _userUnitOfWork.UserRepository.UpdateAsync(foundUser);
 
                 return AtomicTaskResult.Success;
             }
@@ -63,7 +90,7 @@ namespace UseCases
         {
             try
             {
-                var foundUser = await _userRepository.GetByIdAsync(id);
+                var foundUser = await _userUnitOfWork.UserRepository.GetByIdAsync(id);
 
                 if (foundUser == null)
                 {
@@ -71,7 +98,7 @@ namespace UseCases
                 }
 
                 foundUser.Status = EntityStatus.Active;
-                await _userRepository.UpdateAsync(foundUser);
+                await _userUnitOfWork.UserRepository.UpdateAsync(foundUser);
 
                 return AtomicTaskResult.Success;
             }

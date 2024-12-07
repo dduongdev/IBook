@@ -115,5 +115,10 @@ namespace UseCases
                 return new AtomicTaskResult(AtomicTaskResultCodes.Error, ex.Message);
             }
         }
+
+        public Task<IEnumerable<OrderItem>> GetOrderItemsForOrderAsync(int orderId)
+        {
+            return _orderUnitOfWork.OrderItemRepository.GetByOrderIdAsync(orderId);
+        }
     }
 }

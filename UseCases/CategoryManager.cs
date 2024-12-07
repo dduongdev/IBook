@@ -8,7 +8,7 @@ using UseCases.UnitOfWork;
 
 namespace UseCases
 {
-    public class CategoryManager
+    public class CategoryManager : ICategoryManager
     {
         private readonly ICategoryUnitOfWork _categoryUnitOfWork;
 

@@ -11,18 +11,18 @@ namespace UseCases
 {
     public class AuthenticationManager : IAuthenticationManager
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserManager _userManager;
 
-        public AuthenticationManager(IUserRepository userRepository)
+        public AuthenticationManager(IUserManager userManager)
         {
-            _userRepository = userRepository;
+            _userManager = userManager;
         }
 
         public async Task<LoginResult> LoginAsync(string username, string password)
         {
             try
             {
-                var foundUser = await _userRepository.GetByUsernameAsync(username);
+                var foundUser = await _userManager.GetByUsernameAsync(username);
 
                 if (foundUser == null)
                 {
@@ -48,7 +48,7 @@ namespace UseCases
         {
             try
             {
-                var existingUser = await _userRepository.GetByUsernameAsync(user.Username);
+                var existingUser = await _userManager.GetByUsernameAsync(user.Username);
 
                 if (existingUser != null)
                 {
@@ -58,8 +58,12 @@ namespace UseCases
                 var passwordHasher = new PasswordHasher<string>();
                 user.Password = passwordHasher.HashPassword(user.Username, user.Password);
 
-                await _userRepository.AddAsync(user);
-                return SignupResult.Success;
+                var addUserResult =  await _userManager.AddAsync(user);
+
+                if (addUserResult.ResultCode == AtomicTaskResultCodes.Success)
+                    return SignupResult.Success;
+                else
+                    return new SignupResult(SignupResultCodes.Error, "Failed to create user. Please try again.");
             }
             catch (Exception ex)
             {

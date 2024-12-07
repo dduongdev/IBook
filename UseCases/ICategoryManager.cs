@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace UseCases
 {
-    public interface IUserManager
+    public interface ICategoryManager
     {
-        Task<IEnumerable<User>> GetAllAsync();
-        Task<User?> GetByIdAsync(int id);
-        Task<User?> GetByUsernameAsync(string username);
-        Task<AtomicTaskResult> AddAsync(User user);
-        Task UpdateAsync(User user);
+        Task<IEnumerable<Category>> GetAllAsync();
+        Task<Category?> GetByIdAsync(int id);
+        Task AddAsync(Category category);
+        Task UpdateAsync(Category category);
         Task<AtomicTaskResult> SuspendAsync(int id);
         Task<AtomicTaskResult> ActivateAsync(int id);
     }

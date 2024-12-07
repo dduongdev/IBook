@@ -8,7 +8,7 @@ using UseCases.Repositories;
 
 namespace UseCases
 {
-    public class CartItemManager
+    public class CartItemManager : ICartItemManager
     {
         private readonly ICartItemRepository _cartItemRepository;
 
