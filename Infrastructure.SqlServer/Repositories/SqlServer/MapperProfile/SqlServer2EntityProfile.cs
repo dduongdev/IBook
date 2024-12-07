@@ -24,7 +24,9 @@ namespace Infrastructure.SqlServer.Repositories.SqlServer.MapperProfile
             CreateMap<Entities.User, User>()
                 .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
             CreateMap<Order, Entities.Order>()
-                .ForMember(dest => dest.)
+                .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems));
+            CreateMap<Entities.Order, Order>()
+                .ForMember(dest => dest.OrderItems, opt => opt.Ignore());
         }
     }
 }
