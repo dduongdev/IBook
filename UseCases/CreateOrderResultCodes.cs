@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace UseCases
 {
-    public enum SuspendEntityResultCodes
+    public enum CreateOrderResultCodes
     {
-        NotFound,
         Success,
+        BookOutOfStock,
+        BookStockTooLow,
+        BookIsSuspended,
+        BookNotFound,
         Error
     }
 }

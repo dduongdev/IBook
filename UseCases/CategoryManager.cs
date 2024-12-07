@@ -37,7 +37,7 @@ namespace UseCases
             return _categoryUnitOfWork.CategoryRepository.UpdateAsync(category);
         }
 
-        public async Task<SuspendEntityResult> SuspendAsync(int id)
+        public async Task<AtomicTaskResult> SuspendAsync(int id)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace UseCases
 
                 if (foundCategory == null)
                 {
-                    return SuspendEntityResult.NotFound;
+                    return AtomicTaskResult.NotFound;
                 }
 
                 foundCategory.Status = EntityStatus.Suspended;
@@ -66,11 +66,48 @@ namespace UseCases
 
                 await _categoryUnitOfWork.SaveChangesAsync();
 
-                return SuspendEntityResult.Success;
+                return AtomicTaskResult.Success;
             }
             catch (Exception ex)
             {
-                return new SuspendEntityResult(SuspendEntityResultCodes.Error, ex.Message);
+                await _categoryUnitOfWork.CancelTransactionAsync();
+                return new AtomicTaskResult(AtomicTaskResultCodes.Error, ex.Message);
+            }
+        }
+
+        public async Task<AtomicTaskResult> ActivateAsync(int id)
+        {
+            try
+            {
+                await _categoryUnitOfWork.BeginTransactionAsync();
+
+                var foundCategory = await _categoryUnitOfWork.CategoryRepository.GetByIdAsync(id);
+                if (foundCategory == null)
+                {
+                    return AtomicTaskResult.NotFound;
+                }
+
+                foundCategory.Status = EntityStatus.Active;
+
+                var books = await _categoryUnitOfWork.BookRepository.GetAllAsync();
+                foreach (var book in books)
+                {
+                    if (book.CategoryId == foundCategory.Id)
+                    {
+                        book.Status = EntityStatus.Active;
+                        await _categoryUnitOfWork.BookRepository.UpdateAsync(book);
+                    }
+                }
+
+                await _categoryUnitOfWork.CategoryRepository.UpdateAsync(foundCategory);
+                await _categoryUnitOfWork.SaveChangesAsync();
+
+                return AtomicTaskResult.Success;
+            }
+            catch (Exception ex)
+            {
+                await _categoryUnitOfWork.CancelTransactionAsync();
+                return new AtomicTaskResult(AtomicTaskResultCodes.Error, ex.Message);
             }
         }
     }

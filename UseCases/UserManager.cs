@@ -8,50 +8,52 @@ using UseCases.Repositories;
 
 namespace UseCases
 {
-    public class BookManager
+    public class UserManager
     {
-        private readonly IBookRepository _bookRepository;
+        private readonly IUserRepository _userRepository;
 
-        public BookManager(IBookRepository bookRepository) 
+        public UserManager(IUserRepository userRepository)
         {
-            _bookRepository = bookRepository; 
+            _userRepository = userRepository;
         }
 
-        public Task<IEnumerable<Book>> GetAllAsync()
+        public Task<IEnumerable<User>> GetAllAsync()
         {
-            return _bookRepository.GetAllAsync();
+            return _userRepository.GetAllAsync();
         }
 
-        public Task<Book?> GetByIdAsync(int id)
+        public Task<User?> GetByIdAsync(int id)
         {
-            return _bookRepository.GetByIdAsync(id);
+            return _userRepository.GetByIdAsync(id);
         }
 
-        public Task AddAsync(Book book)
+        public Task AddAsync(User user)
         {
-            return _bookRepository.AddAsync(book);
+            return _userRepository.AddAsync(user);
         }
 
-        public Task UpdateAsync(Book book)
+        public Task UpdateAsync(User user)
         {
-            return _bookRepository.UpdateAsync(book);
+            return _userRepository.UpdateAsync(user);
         }
 
         public async Task<AtomicTaskResult> SuspendAsync(int id)
         {
             try
             {
-                var foundBook = await _bookRepository.GetByIdAsync(id);
-                if (foundBook == null)
+                var foundUser = await _userRepository.GetByIdAsync(id);
+                if (foundUser == null)
                 {
                     return AtomicTaskResult.NotFound;
                 }
 
-                foundBook.Status = EntityStatus.Suspended;
-                await _bookRepository.UpdateAsync(foundBook);
+                foundUser.Status = EntityStatus.Suspended;
+
+                await _userRepository.UpdateAsync(foundUser);
+
                 return AtomicTaskResult.Success;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return new AtomicTaskResult(AtomicTaskResultCodes.Error, ex.Message);
             }
@@ -61,14 +63,15 @@ namespace UseCases
         {
             try
             {
-                var foundBook = await _bookRepository.GetByIdAsync(id);
-                if (foundBook == null)
+                var foundUser = await _userRepository.GetByIdAsync(id);
+
+                if (foundUser == null)
                 {
                     return AtomicTaskResult.NotFound;
                 }
 
-                foundBook.Status = EntityStatus.Active;
-                await _bookRepository.UpdateAsync(foundBook);
+                foundUser.Status = EntityStatus.Active;
+                await _userRepository.UpdateAsync(foundUser);
 
                 return AtomicTaskResult.Success;
             }
