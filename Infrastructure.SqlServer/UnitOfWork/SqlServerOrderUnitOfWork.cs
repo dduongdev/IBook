@@ -17,6 +17,7 @@ namespace Infrastructure.SqlServer.UnitOfWork
         private readonly IMapper _mapper;
 
         public IBookRepository BookRepository { get; }
+        public IOrderRepository OrderRepository { get; }
 
         public IOrderItemRepository OrderItemRepository { get; }
 
@@ -26,6 +27,7 @@ namespace Infrastructure.SqlServer.UnitOfWork
             _mapper = mapper;
 
             BookRepository = new SqlServerBookRepository(context, mapper);
+            OrderRepository = new SqlServerOrderRepository(context, mapper);
             OrderItemRepository = new SqlServerOrderItemRepository(context, mapper);
         }
 
