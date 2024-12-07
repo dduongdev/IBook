@@ -38,22 +38,22 @@ namespace UseCases
 
                     if (book == null)
                     {
-                        return new CreateOrderResult(CreateOrderResultCodes.BookNotFound, string.Empty);
+                        return new CreateOrderResult(CreateOrderResultCodes.BookNotFound, $"The book with id {item.BookId} is not found.");
                     }
 
                     if (book.Status == EntityStatus.Suspended)
                     {
-                        return new CreateOrderResult(CreateOrderResultCodes.BookIsSuspended, string.Empty);
+                        return new CreateOrderResult(CreateOrderResultCodes.BookIsSuspended, $"{book.Title} book is suspended.");
                     }
 
                     if (book.Stock == 0)
                     {
-                        return new CreateOrderResult(CreateOrderResultCodes.BookOutOfStock, string.Empty);
+                        return new CreateOrderResult(CreateOrderResultCodes.BookOutOfStock, $"{book.Title} book is out of stock.");
                     }
 
                     if (book.Stock < item.Quantity)
                     {
-                        return new CreateOrderResult(CreateOrderResultCodes.BookStockTooLow, string.Empty);
+                        return new CreateOrderResult(CreateOrderResultCodes.BookStockTooLow, $"{book.Title} book is too low.");
                     }
 
                     book.Stock -= item.Quantity;
@@ -85,8 +85,7 @@ namespace UseCases
                     return AtomicTaskResult.NotFound;
                 }
 
-                var orderItems = await _orderUnitOfWork.OrderItemRepository.GetByOrderIdAsync(foundOrder.Id);
-                foreach (var item in orderItems)
+                foreach (var item in foundOrder.OrderItems)
                 {
                     var bookInInventory = await _orderUnitOfWork.BookRepository.GetByIdAsync(item.BookId);
                     if (bookInInventory == null)
@@ -116,12 +115,22 @@ namespace UseCases
             return _orderUnitOfWork.OrderRepository.GetByIdAsync(id);
         }
 
-        public async Task ChangeOrderStatus(int id, OrderStatus status)
+        public async Task ChangeStatus(int id, OrderStatus status)
         {
             var foundOrder = await _orderUnitOfWork.OrderRepository.GetByIdAsync(id);
             if (foundOrder != null)
             {
                 foundOrder.Status = status;
+                await _orderUnitOfWork.OrderRepository.UpdateAsync(foundOrder);
+            }
+        }
+
+        public async Task ChangePaymentStatus(int id, PaymentStatus paymentStatus)
+        {
+            var foundOrder = await _orderUnitOfWork.OrderRepository.GetByIdAsync(id);
+            if (foundOrder != null)
+            {
+                foundOrder.PaymentStatus = paymentStatus;
                 await _orderUnitOfWork.OrderRepository.UpdateAsync(foundOrder);
             }
         }
