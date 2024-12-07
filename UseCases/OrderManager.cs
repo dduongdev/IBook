@@ -120,5 +120,20 @@ namespace UseCases
         {
             return _orderUnitOfWork.OrderItemRepository.GetByOrderIdAsync(orderId);
         }
+
+        public Task UpdateAsync(Order order)
+        {
+            return _orderUnitOfWork.OrderRepository.UpdateAsync(order);
+        }
+
+        public async Task ChangeOrderStatus(int id, OrderStatus status)
+        {
+            var foundOrder = await _orderUnitOfWork.OrderRepository.GetByIdAsync(id);
+            if (foundOrder != null)
+            {
+                foundOrder.Status = status;
+                await _orderUnitOfWork.OrderRepository.UpdateAsync(foundOrder);
+            }
+        }
     }
 }
