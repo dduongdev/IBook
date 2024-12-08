@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UseCases
+namespace UseCases.TaskResults
 {
-    public enum LoginResultCodes
+    public enum SignupResultCodes
     {
-        UserNotFound,
-        WrongPassword,
+        UserExisted,
         Success,
         Error
     }

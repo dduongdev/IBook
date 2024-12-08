@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UseCases
+namespace UseCases.TaskResults
 {
     public class LoginResult
     {

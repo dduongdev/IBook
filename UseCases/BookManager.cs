@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UseCases.Repositories;
+using UseCases.TaskResults;
 
 namespace UseCases
 {

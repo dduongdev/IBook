@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UseCases
+namespace UseCases.TaskResults
 {
     public class SignupResult
     {
         public SignupResultCodes ResultCode { get; }
         public string Message { get; } = string.Empty;
 
-        public SignupResult(SignupResultCodes resultCode, string message) 
-        {       
+        public SignupResult(SignupResultCodes resultCode, string message)
+        {
             ResultCode = resultCode;
             Message = message;
         }

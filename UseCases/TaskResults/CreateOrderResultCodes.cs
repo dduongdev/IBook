@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UseCases
+namespace UseCases.TaskResults
 {
-    public enum SignupResultCodes
+    public enum CreateOrderResultCodes
     {
-        UserExisted,
         Success,
+        BookOutOfStock,
+        BookStockTooLow,
+        BookIsSuspended,
+        BookNotFound,
         Error
     }
 }
