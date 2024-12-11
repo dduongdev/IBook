@@ -1,0 +1,91 @@
+﻿.filter-container {
+    background-color: #fff; /* Background color */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow for the 'lifted' effect */
+    border-radius: 8px; /* Rounded corners */
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 20px; /* Space below the filter */
+}
+
+/* Optional: add some hover effect to enhance interactivity */
+.filter-container:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+.book-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+    .book-card:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        transform: translateY(-5px);
+    }
+
+.book-card__image {
+    overflow: hidden;
+    height: 200px;
+    width: 100%;
+    object-fit: cover; /* Ensure image covers the space properly */
+}
+
+    .book-card__image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.book-card__details {
+    padding: 15px;
+    text-align: left;
+}
+
+.book-card__title {
+    font-size: 1.25rem; /* Increase the font size for the title */
+    font-weight: bold;
+    color: #333; /* Darker color for better contrast */
+    margin-bottom: 10px; /* Space between the title and other text */
+}
+
+.book-card__author, .book-card__publisher, .book-card__price {
+    font-size: 1rem;
+    color: #555; /* Slightly lighter color for readability */
+    margin-bottom: 8px; /* Add space between each text element */
+}
+
+.book-card__price {
+    font-weight: bold;
+    color: #000; /* Make the price stand out */
+}
+
+.book-card__author, .book-card__publisher {
+    font-style: italic; /* Add a little style difference for author and publisher */
+}
+
+.book-card__details p {
+    word-wrap: break-word; /* Ensure long words break appropriately */
+}
+
+/* Modifier for featured book cards */
+.book-card--featured {
+    border: 2px solid #f39c12;
+    background-color: #fdf2e9;
+}
+
+@media (max-width: 576px) {
+    .book-card {
+        margin-bottom: 15px;
+    }
+
+    .book-card__title {
+        font-size: 1.1rem; /* Smaller title on mobile */
+    }
+
+    .book-card__author, .book-card__publisher, .book-card__price {
+        font-size: 0.9rem; /* Slightly smaller text on mobile */
+    }
+}

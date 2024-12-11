@@ -13,10 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Client\Product\" />
-    <Folder Include="Views\Shared\Client\" />
     <Folder Include="wwwroot\css\admin\" />
-    <Folder Include="wwwroot\css\client\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>

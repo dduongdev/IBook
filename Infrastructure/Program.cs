@@ -1,4 +1,5 @@
 using Infrastructure.Models;
+using Infrastructure.Services;
 using Infrastructure.SqlServer.Repositories;
 using Infrastructure.SqlServer.Repositories.SqlServer.DataContext;
 using Infrastructure.SqlServer.Repositories.SqlServer.MapperProfile;
@@ -19,7 +20,11 @@ namespace Infrastructure
             RegisterInfrastructureServices(builder.Configuration, builder.Services);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews()
+                .AddRazorOptions(options =>
+                {
+                    options.ViewLocationFormats.Add("/Views/Client/{1}/{0}.cshtml");
+                });
 
             var app = builder.Build();
 
@@ -37,6 +42,12 @@ namespace Infrastructure
             app.UseAuthorization();
 
             app.MapStaticAssets();
+
+            app.MapControllerRoute(
+                name: "client",
+                pattern: "Client/{controller=Home}/{action=Index}/{id?}")
+                .WithStaticAssets();
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
@@ -83,6 +94,9 @@ namespace Infrastructure
             services.AddTransient<IOrderManager, OrderManager>();
             services.AddTransient<IPublisherManager, PublisherManager>();
             services.AddTransient<IUserManager, UserManager>();
+
+            services.AddTransient<BookService>();
+            services.AddTransient<BookMappingService>();
         }
     }
 }

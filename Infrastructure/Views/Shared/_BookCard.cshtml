@@ -1,0 +1,15 @@
+﻿@model Infrastructure.Models.ViewModels.BookCardViewModel
+
+<div class="col-md-3 mb-4">
+    <div class="book-card" onclick="window.location.href='/Book/Details/@Model.Id'">
+        <div class="book-card__image">
+            <img class="img-fluid" src="@Model.Image" alt="Book Image">
+        </div>
+        <div class="book-card__details">
+            <h5 class="book-card__title">@Model.Title</h5>
+            <p class="book-card__author">Tác giả: @Model.Author</p>
+            <p class="book-card__publisher">Nhà xuất bản: @Model.PublisherName</p>
+            <p class="book-card__price"><strong>@Model.Price.ToString("C")</strong></p>
+        </div>
+    </div>
+</div>
