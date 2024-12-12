@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace Infrastructure.SqlServer.Repositories.SqlServer.DataContext
         public required string Title { get; set; }
         public string? Author { get; set; }
         public string? Description { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public required decimal Price { get; set; }
         public required int Stock { get; set; }
         public string? ImagesDirectory { get; set; }
