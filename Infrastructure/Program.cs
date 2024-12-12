@@ -106,8 +106,6 @@ namespace Infrastructure
             services.AddTransient<BookService>();
             services.AddTransient<BookMappingService>();
             services.AddTransient<ImageService>();
-            services.AddTransient<FeedbackService>();
-            services.AddTransient<FeedbackMappingService>();
         }
     }
 }
