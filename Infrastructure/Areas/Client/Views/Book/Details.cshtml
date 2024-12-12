@@ -6,9 +6,9 @@
 }
 
 @section Styles {
-    <link href="~/css/client/style.css" rel="stylesheet">
-    <link href="~/css/client/rating.css" rel="stylesheet">
-    <link href="~/css/client/input_quantity.css" rel="stylesheet">
+        <link href="~/css/client/style.css" rel="stylesheet">
+            <link href="~/css/client/rating.css" rel="stylesheet">
+            <link href="~/css/client/input_quantity.css" rel="stylesheet">
 }
 
 @{
@@ -61,10 +61,7 @@
                     <div class="star-rating"> 
                         <span class="fw-bold">@ratingAverage</span>
                         @{
-                            for (int i = 1; i <= 5; i++) 
-                            {
-                                <span class="star @(i <= Math.Round(ratingAverage) ? "filled" : "")">&#9733;</span>
-                            } 
+                            await Html.RenderPartialAsync("_StarRating", ratingAverage);
                         }
                         <span class="fw-light">(@feedbacksCount lượt đánh giá)</span>
                     </div>
@@ -99,23 +96,25 @@
                     </div>
 
                     @if (Model.Status == Entities.EntityStatus.Active) {
-                        <div class="quantity-input__wrapper"> 
-                            <p class="quantity-input__label">Số Lượng</p> 
-                            <div class="quantity-input__group">
-                                <button class="quantity-input__button quantity-input__button--disabled fw-bold" id="decrease-btn">-</button>
-                                <input type="text" class="quantity-input__input" id="quantity-input" value="1"> 
-                                <button class="quantity-input__button fw-bold" id="increase-btn">+</button> 
-                            </div> 
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-6">
-                                <button class="btn btn-dark w-100 text-white">Thêm vào giỏ hàng</button>
+                        <form>
+                            <div class="quantity-input__wrapper">
+                                <p class="quantity-input__label">Số Lượng</p>
+                                <div class="quantity-input__group">
+                                    <button class="quantity-input__button quantity-input__button--disabled fw-bold" id="decrease-btn">-</button>
+                                    <input type="text" class="quantity-input__input" id="quantity-input" value="1">
+                                    <button class="quantity-input__button fw-bold" id="increase-btn">+</button>
+                                </div>
                             </div>
-                            <div class="col-6">
-                                <button class="btn btn-dark w-100 text-white">Mua ngay</button>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <button class="btn btn-dark w-100 text-white">Thêm vào giỏ hàng</button>
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn btn-dark w-100 text-white">Mua ngay</button>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     }
                     else {
                         <span class="text-danger">

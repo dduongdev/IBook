@@ -1,0 +1,8 @@
+﻿@model double
+
+@{
+    for (int i = 1; i <= 5; i++)
+    {
+        <span class="star @(i <= Math.Round(Model) ? "filled" : "")">&#9733;</span>
+    }
+}

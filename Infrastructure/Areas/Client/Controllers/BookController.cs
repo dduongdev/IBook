@@ -17,8 +17,10 @@ namespace Infrastructure.Areas.Client.Controllers
         private readonly IFeedbackManager _feedbackManager;
         private readonly BookService _bookService;
         private readonly BookMappingService _bookMappingService;
+        private readonly FeedbackService _feedbackService;
+        private readonly FeedbackMappingService _feedbackMappingService;
 
-        public BookController(IBookManager bookManager, IPublisherManager publisherManager, ICategoryManager categoryManager, IFeedbackManager feedbackManager, BookService bookService, BookMappingService bookMappingService)
+        public BookController(IBookManager bookManager, IPublisherManager publisherManager, ICategoryManager categoryManager, IFeedbackManager feedbackManager, BookService bookService, BookMappingService bookMappingService, FeedbackService feedbackService, FeedbackMappingService feedbackMappingService)
         {
             _bookManager = bookManager;
             _publisherManager = publisherManager;
@@ -26,6 +28,8 @@ namespace Infrastructure.Areas.Client.Controllers
             _feedbackManager = feedbackManager;
             _bookService = bookService;
             _bookMappingService = bookMappingService;
+            _feedbackService = feedbackService;
+            _feedbackMappingService = feedbackMappingService;
         }
 
         public async Task<IActionResult> Index(BookFilterCriteria bookFilterCriteria, BookSearchCriteria bookSearchCriteria, BookSortCriteria bookSortCriteria, int pageIndex = 1)
@@ -80,8 +84,9 @@ namespace Infrastructure.Areas.Client.Controllers
 
             var bookDetailsViewModel = await _bookMappingService.MapToBookDetailsViewModel(foundBook);
             var feedbacks = await _feedbackManager.GetByBookIdAsync(foundBook.Id);
-
-            ViewBag.Feedbacks = feedbacks;
+            IEnumerable<FeedbackViewModel> feedbackViewModels = await Task.WhenAll(feedbacks.Select(feedback => _feedbackMappingService.MapToFeedbackViewModel(feedback)));
+            feedbackViewModels = _feedbackService.BuildFeedbackTree(feedbackViewModels);
+            ViewBag.Feedbacks = feedbackViewModels;
 
             return View(bookDetailsViewModel);
         }
