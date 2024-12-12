@@ -13,13 +13,13 @@
 
 @{
     var feedbacks = ViewBag.Feedbacks as List<Entities.Feedback>;
-    var mainFeedbacks = feedbacks?.Where(_ => _.AncestorFeedbackId == null).ToList();
-    var ratingAverage = 5.0;
     var feedbacksCount = 0;
-    if (mainFeedbacks != null && mainFeedbacks.Any())
+    var ratingAverage = 5.0;
+    if (feedbacks != null && feedbacks.Any())
     {
-        ratingAverage = mainFeedbacks.Average(_ => _.Rating);
-        feedbacksCount = mainFeedbacks.Count();
+        feedbacksCount = feedbacks.Count();
+        var hasRatingFeedbacks = feedbacks.Where(_ => _.Rating.HasValue);
+        ratingAverage = (ratingAverage + hasRatingFeedbacks.Average(_ => _.Rating.Value)) / 2.0;
     }
 }
 
@@ -96,25 +96,23 @@
                     </div>
 
                     @if (Model.Status == Entities.EntityStatus.Active) {
-                        <form>
-                            <div class="quantity-input__wrapper">
-                                <p class="quantity-input__label">Số Lượng</p>
-                                <div class="quantity-input__group">
-                                    <button class="quantity-input__button quantity-input__button--disabled fw-bold" id="decrease-btn">-</button>
-                                    <input type="text" class="quantity-input__input" id="quantity-input" value="1">
-                                    <button class="quantity-input__button fw-bold" id="increase-btn">+</button>
-                                </div>
+                        <div class="quantity-input__wrapper">
+                            <p class="quantity-input__label">Số Lượng</p>
+                            <div class="quantity-input__group">
+                                <button class="quantity-input__button quantity-input__button--disabled fw-bold" id="decrease-btn">-</button>
+                                <input type="text" class="quantity-input__input" id="quantity-input" value="1">
+                                <button class="quantity-input__button fw-bold" id="increase-btn">+</button>
                             </div>
+                        </div>
 
-                            <div class="row">
-                                <div class="col-6">
-                                    <button class="btn btn-dark w-100 text-white">Thêm vào giỏ hàng</button>
-                                </div>
-                                <div class="col-6">
-                                    <button class="btn btn-dark w-100 text-white">Mua ngay</button>
-                                </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <button class="btn btn-dark w-100 text-white">Thêm vào giỏ hàng</button>
                             </div>
-                        </form>
+                            <div class="col-6">
+                                <button class="btn btn-dark w-100 text-white">Mua ngay</button>
+                            </div>
+                        </div>
                     }
                     else {
                         <span class="text-danger">
@@ -133,11 +131,11 @@
         { 
             var input = document.getElementById('quantity-input'); 
             var currentValue = parseInt(input.value); 
-            if (currentValue < 100) 
+            if (currentValue < @Model.Stock) 
             { 
                 input.value = currentValue + 1; 
                 document.getElementById('decrease-btn').classList.remove('quantity-input__button--disabled'); 
-                if (currentValue + 1 === @Model.Stock) 
+                if (currentValue + 1 === (@Model.Stock)) 
                 { 
                     this.classList.add('quantity-input__button--disabled');
                 } 

@@ -19,7 +19,7 @@ namespace Infrastructure.Services
             {
                 Id = feedback.Id,
                 Comment = feedback.Comment ?? "",
-                Rating = feedback.Rating,
+                Rating = feedback.Rating ?? 0,
                 Username = "Unknown",
                 AncestorFeedbackId = feedback.AncestorFeedbackId,
                 CreatedAt = feedback.CreatedAt
