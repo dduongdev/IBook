@@ -12,15 +12,8 @@
 }
 
 @{
-    var feedbacks = ViewBag.Feedbacks as List<Entities.Feedback>;
     var feedbacksCount = 0;
     var ratingAverage = 5.0;
-    if (feedbacks != null && feedbacks.Any())
-    {
-        feedbacksCount = feedbacks.Count();
-        var hasRatingFeedbacks = feedbacks.Where(_ => _.Rating.HasValue);
-        ratingAverage = (ratingAverage + hasRatingFeedbacks.Average(_ => _.Rating.Value)) / 2.0;
-    }
 }
 
 @model Infrastructure.Models.ViewModels.BookDetailsViewModel;
