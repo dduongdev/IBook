@@ -6,21 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using UseCases;
 
-namespace Infrastructure.Controllers.Client
+namespace Infrastructure.Areas.Client.Controllers
 {
+    [Area("Client")]
     public class BookController : Controller
     {
         private readonly IBookManager _bookManager;
         private readonly IPublisherManager _publisherManager;
         private readonly ICategoryManager _categoryManager;
+        private readonly IFeedbackManager _feedbackManager;
         private readonly BookService _bookService;
         private readonly BookMappingService _bookMappingService;
 
-        public BookController(IBookManager bookManager, IPublisherManager publisherManager, ICategoryManager categoryManager, BookService bookService, BookMappingService bookMappingService)
+        public BookController(IBookManager bookManager, IPublisherManager publisherManager, ICategoryManager categoryManager, IFeedbackManager feedbackManager, BookService bookService, BookMappingService bookMappingService)
         {
             _bookManager = bookManager;
             _publisherManager = publisherManager;
             _categoryManager = categoryManager;
+            _feedbackManager = feedbackManager;
             _bookService = bookService;
             _bookMappingService = bookMappingService;
         }
@@ -33,7 +36,7 @@ namespace Infrastructure.Controllers.Client
             }
 
             var books = await _bookManager.GetAllAsync();
-            books = _bookService.GetBooksByStatus(books, EntityStatus.Active);
+            books = books.Where(_ => _.Status == EntityStatus.Active);
 
             books = _bookService.ApplySearching(books, bookSearchCriteria);
 
@@ -48,11 +51,11 @@ namespace Infrastructure.Controllers.Client
             ViewBag.CurrentPage = pageIndex;
 
             var categories = await _categoryManager.GetAllAsync();
-            categories = categories.Where(c => c.Status == EntityStatus.Active);
+            categories = categories.Where(_ => _.Status == EntityStatus.Active);
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
 
             var publishers = await _publisherManager.GetAllAsync();
-            publishers = publishers.Where(p => p.Status == EntityStatus.Active);
+            publishers = publishers.Where(_ => _.Status == EntityStatus.Active);
             ViewBag.Publishers = new SelectList(publishers, "Id", "Name");
 
             IEnumerable<BookCardViewModel> bookCardViewModels = await Task.WhenAll(
@@ -60,6 +63,27 @@ namespace Infrastructure.Controllers.Client
             );
 
             return View(bookCardViewModels);
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            var foundBook = await _bookManager.GetByIdAsync(id.Value);
+            if (foundBook == null)
+            {
+                return NotFound();
+            }
+
+            var bookDetailsViewModel = await _bookMappingService.MapToBookDetailsViewModel(foundBook);
+            var feedbacks = await _feedbackManager.GetByBookIdAsync(foundBook.Id);
+
+            ViewBag.Feedbacks = feedbacks;
+
+            return View(bookDetailsViewModel);
         }
     }
 }

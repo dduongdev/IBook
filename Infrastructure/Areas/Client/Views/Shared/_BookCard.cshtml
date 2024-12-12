@@ -1,7 +1,7 @@
 ﻿@model Infrastructure.Models.ViewModels.BookCardViewModel
 
 <div class="col-md-3 mb-4">
-    <div class="book-card" onclick="window.location.href='/Book/Details/@Model.Id'">
+    <a class="book-card" asp-area="Client" asp-action="Details" asp-route-id="@Model.Id">
         <div class="book-card__image">
             <img class="img-fluid" src="@Model.Image" alt="Book Image">
         </div>
@@ -11,5 +11,5 @@
             <p class="book-card__publisher">Nhà xuất bản: @Model.PublisherName</p>
             <p class="book-card__price"><strong>@Model.Price.ToString("C")</strong></p>
         </div>
-    </div>
+    </a>
 </div>

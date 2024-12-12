@@ -46,10 +46,5 @@ namespace Infrastructure.Services
             );
             return booksAfterSearching;
         }
-
-        public IEnumerable<Book> GetBooksByStatus(IEnumerable<Book> books, EntityStatus status)
-        {
-            return books.Where(book => book.Status == status);
-        }
     }
 }

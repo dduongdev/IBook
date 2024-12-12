@@ -4,6 +4,7 @@ using Infrastructure.SqlServer.Repositories;
 using Infrastructure.SqlServer.Repositories.SqlServer.DataContext;
 using Infrastructure.SqlServer.Repositories.SqlServer.MapperProfile;
 using Infrastructure.SqlServer.UnitOfWork;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using UseCases;
 using UseCases.Repositories;
@@ -19,12 +20,17 @@ namespace Infrastructure
 
             RegisterInfrastructureServices(builder.Configuration, builder.Services);
 
+            builder.Services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.AreaViewLocationFormats.Clear();
+                options.AreaViewLocationFormats.Add("/Areas/{2}/Views/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/Areas/{2}/Views/Shared/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+            });
+
+
             // Add services to the container.
-            builder.Services.AddControllersWithViews()
-                .AddRazorOptions(options =>
-                {
-                    options.ViewLocationFormats.Add("/Views/Client/{1}/{0}.cshtml");
-                });
+            builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
 
@@ -42,15 +48,17 @@ namespace Infrastructure
             app.UseAuthorization();
 
             app.MapStaticAssets();
+            app.UseStaticFiles();
 
             app.MapControllerRoute(
-                name: "client",
-                pattern: "Client/{controller=Home}/{action=Index}/{id?}")
-                .WithStaticAssets();
+                name: "areas",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+                pattern: "{controller=Home}/{action=Index}/{id?}",
+                defaults: new { area = "Client" })
                 .WithStaticAssets();
 
             app.Run();
@@ -97,6 +105,7 @@ namespace Infrastructure
 
             services.AddTransient<BookService>();
             services.AddTransient<BookMappingService>();
+            services.AddTransient<ImageService>();
         }
     }
 }

@@ -1,0 +1,170 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Details";
+}
+
+@section Styles {
+    <link href="~/css/client/style.css" rel="stylesheet">
+    <link href="~/css/client/rating.css" rel="stylesheet">
+    <link href="~/css/client/input_quantity.css" rel="stylesheet">
+}
+
+@{
+    var feedbacks = ViewBag.Feedbacks as List<Entities.Feedback>;
+    var mainFeedbacks = feedbacks?.Where(_ => _.AncestorFeedbackId == null).ToList();
+    var ratingAverage = 5.0;
+    var feedbacksCount = 0;
+    if (mainFeedbacks != null && mainFeedbacks.Any())
+    {
+        ratingAverage = mainFeedbacks.Average(_ => _.Rating);
+        feedbacksCount = mainFeedbacks.Count();
+    }
+}
+
+@model Infrastructure.Models.ViewModels.BookDetailsViewModel;
+
+@if (Model.Status == Entities.EntityStatus.Suspended) 
+{
+    <div class="alert alert-warning" role="alert">
+        <span class="text-danger">
+            Sản phẩm này hiện đang tạm ngừng bán.
+        </span>
+    </div>
+}
+
+<div class="container mt-4">
+    <h2>Chi tiết sản phẩm</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="product-detail__main-image">
+                <img id="mainImage" src="@Model.Images.FirstOrDefault()" class="img-fluid" alt="Main Image">
+            </div>
+            <div class="product-detail__thumbnails mt-3">
+                <div class="row">
+                    @foreach (var image in Model.Images)
+                    {
+                        <div class="col-3 product-detail__thumbnail-container">
+                            <img src="@image" class="img-fluid product-detail__thumbnail" alt="Thumbnail" onclick="changeImage(this)">
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>@Model.Title</h4>
+                    <div class="star-rating"> 
+                        <span class="fw-bold">@ratingAverage</span>
+                        @{
+                            for (int i = 1; i <= 5; i++) 
+                            {
+                                <span class="star @(i <= Math.Round(ratingAverage) ? "filled" : "")">&#9733;</span>
+                            } 
+                        }
+                        <span class="fw-light">(@feedbacksCount lượt đánh giá)</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p><strong>Danh mục:</strong> @Model.CategoryName</p>
+                    <p><strong>Giá:</strong> @Model.Price.ToString("C")</p>
+                    <p><strong>Mô tả:</strong> @Model.Description</p>
+                    <p><strong>Hiện có:</strong> @Model.Stock sản phẩm</p>
+
+                    <div class="row"> 
+                        <div class="col-md-6 mb-3">
+                            <div class="product-detail__policy-item"> 
+                                <i class="fa-solid fa-right-left product-detail__policy-icon"></i> 
+                                <span class="product-detail__policy-content fw-bold">Đổi trả miễn phí trong vòng 15 ngày</span>
+                            </div>
+                        </div> 
+
+                        <div class="col-md-6 mb-3"> 
+                            <div class="product-detail__policy-item"> 
+                                <i class="fa-solid fa-arrow-rotate-left product-detail__policy-icon"></i>
+                                <span class="product-detail__policy-content fw-bold">Đổi trả cực dễ chỉ cần số điện thoại</span>
+                            </div> 
+                        </div> 
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="product-detail__policy-item"> 
+                                <i class="fa-solid fa-phone product-detail__policy-icon"></i> 
+                                <span class="product-detail__policy-content fw-bold">Hotline 0385.216.798 hỗ trợ từ 8h30 - 22h mỗi ngày</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.Status == Entities.EntityStatus.Active) {
+                        <div class="quantity-input__wrapper"> 
+                            <p class="quantity-input__label">Số Lượng</p> 
+                            <div class="quantity-input__group">
+                                <button class="quantity-input__button quantity-input__button--disabled fw-bold" id="decrease-btn">-</button>
+                                <input type="text" class="quantity-input__input" id="quantity-input" value="1"> 
+                                <button class="quantity-input__button fw-bold" id="increase-btn">+</button> 
+                            </div> 
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-6">
+                                <button class="btn btn-dark w-100 text-white">Thêm vào giỏ hàng</button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-dark w-100 text-white">Mua ngay</button>
+                            </div>
+                        </div>
+                    }
+                    else {
+                        <span class="text-danger">
+                            Sản phẩm này hiện đang tạm ngừng bán.
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('increase-btn').addEventListener('click', function() 
+        { 
+            var input = document.getElementById('quantity-input'); 
+            var currentValue = parseInt(input.value); 
+            if (currentValue < 100) 
+            { 
+                input.value = currentValue + 1; 
+                document.getElementById('decrease-btn').classList.remove('quantity-input__button--disabled'); 
+                if (currentValue + 1 === @Model.Stock) 
+                { 
+                    this.classList.add('quantity-input__button--disabled');
+                } 
+            } 
+        }); 
+        
+        document.getElementById('decrease-btn').addEventListener('click', function() 
+        { 
+            var input = document.getElementById('quantity-input'); 
+            var currentValue = parseInt(input.value); 
+            if (currentValue > 1) 
+            { 
+                input.value = currentValue - 1; 
+                document.getElementById('increase-btn').classList.remove('quantity-input__button--disabled'); 
+                if (currentValue - 1 === 1) 
+                { 
+                    this.classList.add('quantity-input__button--disabled'); 
+                } 
+            } 
+        });
+    </script>
+    <script>
+        function changeImage(element)
+        {
+            var mainImage = document.getElementById('mainImage');
+            mainImage.src = element.src;
+        }
+    </script>
+}
