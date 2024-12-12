@@ -58,6 +58,10 @@ namespace UseCases
                     }
 
                     book.Stock -= item.Quantity;
+                    if (book.Stock == 0)
+                    {
+                        book.Status = EntityStatus.Suspended;
+                    }
                     await _orderUnitOfWork.BookRepository.UpdateAsync(book);
 
                     await _orderUnitOfWork.OrderItemRepository.AddAsync(item);
