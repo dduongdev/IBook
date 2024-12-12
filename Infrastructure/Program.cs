@@ -1,8 +1,10 @@
 using Infrastructure.Models;
+using Infrastructure.Services;
 using Infrastructure.SqlServer.Repositories;
 using Infrastructure.SqlServer.Repositories.SqlServer.DataContext;
 using Infrastructure.SqlServer.Repositories.SqlServer.MapperProfile;
 using Infrastructure.SqlServer.UnitOfWork;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using UseCases;
 using UseCases.Repositories;
@@ -17,6 +19,15 @@ namespace Infrastructure
             var builder = WebApplication.CreateBuilder(args);
 
             RegisterInfrastructureServices(builder.Configuration, builder.Services);
+
+            builder.Services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.AreaViewLocationFormats.Clear();
+                options.AreaViewLocationFormats.Add("/Areas/{2}/Views/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/Areas/{2}/Views/Shared/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+            });
+
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -37,9 +48,17 @@ namespace Infrastructure
             app.UseAuthorization();
 
             app.MapStaticAssets();
+            app.UseStaticFiles();
+
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+                pattern: "{controller=Home}/{action=Index}/{id?}",
+                defaults: new { area = "Client" })
                 .WithStaticAssets();
 
             app.Run();
@@ -83,6 +102,12 @@ namespace Infrastructure
             services.AddTransient<IOrderManager, OrderManager>();
             services.AddTransient<IPublisherManager, PublisherManager>();
             services.AddTransient<IUserManager, UserManager>();
+
+            services.AddTransient<BookService>();
+            services.AddTransient<BookMappingService>();
+            services.AddTransient<ImageService>();
+            services.AddTransient<FeedbackService>();
+            services.AddTransient<FeedbackMappingService>();
         }
     }
 }

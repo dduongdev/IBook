@@ -17,11 +17,6 @@
                 throw new ArgumentException("PageSize must be greater than 0.");
             }
 
-            if (pageSize > TotalItemCount)
-            {
-                throw new ArgumentException($"PageSize must be less than or equal to the total number of items ({TotalItemCount}).");
-            }
-
             PageSize = pageSize;
             TotalPages = (int)Math.Ceiling(TotalItemCount / (double)PageSize);
         }

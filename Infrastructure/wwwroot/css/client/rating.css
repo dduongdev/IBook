@@ -1,0 +1,14 @@
+﻿
+.star-rating {
+    display: flex;
+    align-items: center;
+}
+
+.star-rating .star {
+    font-size: 1.4rem;
+    color: #ddd;
+}
+
+.star-rating .star.filled {
+    color: #ffc107;
+}
